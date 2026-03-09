@@ -37,7 +37,17 @@ QUESTION = (
 
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = """
+Young are an expert Python developer.
+
+IMPORTANT REQUIREMENTS:
+- Output ONLY a fenced Python code block (wrapped in ```python)
+- Do NOT include any extra text, explanations, or markdown outside the code block.
+- Include all necessary inport statements.
+- Strictly follow the Base URL, endpoint paths, and authentication headers from the documentation.
+- The function should return only the user's name as a string.
+- Handle HTTP errors appropriately by raising exceptions for non-200 responses
+"""
 
 
 # For this simple example
@@ -56,7 +66,7 @@ def YOUR_CONTEXT_PROVIDER(corpus: List[str]) -> List[str]:
 
     For example, return [] to simulate missing context, or [corpus[0]] to include the API docs.
     """
-    return []
+    return [corpus[0]] if corpus else []
 
 
 def make_user_prompt(question: str, context_docs: List[str]) -> str:

@@ -15,7 +15,18 @@ Keep the implementation minimal.
 """
 
 # TODO: Fill this in!
-YOUR_REFLEXION_PROMPT = ""
+YOUR_REFLEXION_PROMPT = """
+You are a code reviewer and debugger. Your task is to analyze failed code,
+identify bugs based on test failures, and provide corrected code.
+
+REQUIREMENTS:
+- Review the previous implementation and test failures carefully.
+- Identify the root cause of each failure.
+- Output ONLY a fenced Python code block with the corrected function.
+- Do NOT include any explanations or extra text.
+- Ensure the fixed code passes all test cases.
+- Keep the function signature: is_valid_password(password: str) -> bool
+"""
 
 
 # Ground-truth test suite used to evaluate generated code
@@ -81,7 +92,7 @@ def evaluate_function(func: Callable[[str], bool]) -> Tuple[bool, List[str]]:
 
 def generate_initial_function(system_prompt: str) -> str:
     response = chat(
-        model="llama3.1:8b",
+        model="gpt-oss:20b",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": "Provide the implementation now."},
@@ -96,7 +107,11 @@ def your_build_reflexion_context(prev_code: str, failures: List[str]) -> str:
 
     Return a string that will be sent as the user content alongside the reflexion system prompt.
     """
-    return ""
+
+    context = f"Previous code:\n```python\n{prev_code}\n```\n\n"
+    context += "Failures:\n" + "\n".join(f"- {f}" for f in failures)
+    context += "\n\nFix these issues. Output ONLY a fenced Python code block."
+    return context
 
 
 def apply_reflexion(
@@ -108,7 +123,7 @@ def apply_reflexion(
     reflection_context = build_context(prev_code, failures)
     print(f"REFLECTION CONTEXT: {reflection_context}, {reflexion_prompt}")
     response = chat(
-        model="llama3.1:8b",
+        model="gpt-oss:20b",
         messages=[
             {"role": "system", "content": reflexion_prompt},
             {"role": "user", "content": reflection_context},
