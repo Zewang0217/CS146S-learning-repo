@@ -1,1 +1,44 @@
 .obsidian
+# ============ Node.js ============
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# ============ TypeScript ============
+dist/
+build/
+*.js
+*.d.ts
+!*.config.js
+*.tsbuildinfo
+
+# ============ 敏感信息 ============
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# ============ IDE/编辑器 ============
+.vscode/
+.idea/
+.trae
+*.swp
+*.swo
+*~
+
+# ============ 系统文件 ============
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============ 日志文件 ============
+logs/
+*.log
+
+# ============ 临时文件 ============
+tmp/
+temp/
+.cache/
